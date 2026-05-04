@@ -1,0 +1,109 @@
+:root {
+  --bg: #050508;
+  --bg2: #0d0d14;
+  --bg3: #13131e;
+  --panel: #0f0f1a;
+  --border: #2a2a40;
+  --neon-yellow: #f5e642;
+  --neon-red: #ff2d55;
+  --neon-blue: #00d4ff;
+  --neon-green: #39ff14;
+  --neon-purple: #bf5fff;
+  --text: #e8e8f0;
+  --text-dim: #7a7a9a;
+  --gold: #ffd700;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 500;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scanline overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--neon-yellow); border-radius: 3px; }
+
+/* Neon text glow utility */
+.glow-yellow { text-shadow: 0 0 10px var(--neon-yellow), 0 0 30px var(--neon-yellow); }
+.glow-red    { text-shadow: 0 0 10px var(--neon-red), 0 0 30px var(--neon-red); }
+.glow-blue   { text-shadow: 0 0 10px var(--neon-blue), 0 0 30px var(--neon-blue); }
+
+/* Animations */
+@keyframes flicker {
+  0%,100% { opacity:1; }
+  92% { opacity:1; }
+  93% { opacity:0.6; }
+  94% { opacity:1; }
+  96% { opacity:0.8; }
+  97% { opacity:1; }
+}
+
+@keyframes pulse-border {
+  0%,100% { box-shadow: 0 0 8px var(--neon-yellow), inset 0 0 8px rgba(245,230,66,0.05); }
+  50%      { box-shadow: 0 0 20px var(--neon-yellow), inset 0 0 15px rgba(245,230,66,0.1); }
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-8px); }
+}
+
+@keyframes slideDown {
+  from { opacity:0; transform: translateY(-20px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity:0; transform: translateY(30px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes notif-in {
+  from { opacity:0; transform: translateX(120%); }
+  to   { opacity:1; transform: translateX(0); }
+}
+
+@keyframes notif-out {
+  from { opacity:1; transform: translateX(0); }
+  to   { opacity:0; transform: translateX(120%); }
+}
