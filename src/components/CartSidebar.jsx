@@ -1,7 +1,4 @@
 import React from 'react'
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
-
-const PAYPAL_CLIENT_ID = 'TU_PAYPAL_SANDBOX_CLIENT_ID'
 
 export default function CartSidebar({ cart, onRemove, onClear, onSuccess, visible, onClose }) {
   const total = cart.reduce((s, i) => s + parseFloat(i.price), 0).toFixed(2)
@@ -9,7 +6,7 @@ export default function CartSidebar({ cart, onRemove, onClear, onSuccess, visibl
   if (!visible) return null
 
   return (
-    <div style={{
+    <div className="cart-overlay" style={{
       position: 'fixed', inset: 0, zIndex: 1000,
       display: 'flex',
     }}>
@@ -20,7 +17,7 @@ export default function CartSidebar({ cart, onRemove, onClear, onSuccess, visibl
       />
 
       {/* Panel */}
-      <div style={{
+      <div className="cart-panel" style={{
         width: 420, maxWidth: '95vw',
         background: '#0a0a12',
         borderLeft: '1px solid #2a2a40',
@@ -29,7 +26,7 @@ export default function CartSidebar({ cart, onRemove, onClear, onSuccess, visibl
         boxShadow: '-10px 0 60px rgba(0,0,0,0.8)',
       }}>
         {/* Header */}
-        <div style={{
+        <div className="cart-header" style={{
           padding: '20px 24px',
           borderBottom: '1px solid #1e1e2e',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -52,7 +49,7 @@ export default function CartSidebar({ cart, onRemove, onClear, onSuccess, visibl
         </div>
 
         {/* Items */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
+        <div className="cart-items" style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
           {cart.length === 0 ? (
             <div style={{
               textAlign: 'center', padding: '60px 0',
@@ -65,7 +62,7 @@ export default function CartSidebar({ cart, onRemove, onClear, onSuccess, visibl
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {cart.map((item, idx) => (
-                <div key={idx} style={{
+                <div className="cart-item" key={idx} style={{
                   background: '#0d0d14',
                   border: '1px solid #1e1e2e',
                   borderRadius: 4,
@@ -81,7 +78,7 @@ export default function CartSidebar({ cart, onRemove, onClear, onSuccess, visibl
                       #{String(item.id).padStart(3,'0')}
                     </div>
                   </div>
-                  <div style={{ fontFamily: 'Orbitron', fontSize: 14, color: '#f5e642', marginRight: 8 }}>
+                  <div className="cart-item-price" style={{ fontFamily: 'Orbitron', fontSize: 14, color: '#f5e642', marginRight: 8 }}>
                     ${item.price}
                   </div>
                   <button onClick={() => onRemove(idx)} style={{
@@ -98,9 +95,9 @@ export default function CartSidebar({ cart, onRemove, onClear, onSuccess, visibl
 
         {/* Footer */}
         {cart.length > 0 && (
-          <div style={{ padding: '20px 24px', borderTop: '1px solid #1e1e2e' }}>
+          <div className="cart-footer" style={{ padding: '20px 24px', borderTop: '1px solid #1e1e2e' }}>
             {/* Total */}
-            <div style={{
+            <div className="cart-total" style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               marginBottom: 20, padding: '14px 16px',
               background: '#0d0d14', border: '1px solid #2a2a40', borderRadius: 4,
@@ -121,32 +118,21 @@ export default function CartSidebar({ cart, onRemove, onClear, onSuccess, visibl
               letterSpacing: 1, transition: 'all 0.2s',
             }}>VACIAR CARRITO</button>
 
-            {/* PayPal */}
-            <div style={{
-              background: '#0d0d14', border: '1px solid #2a2a40',
-              borderRadius: 4, padding: 14,
-            }}>
-              <div style={{ fontFamily: 'Orbitron', fontSize: 8, color: '#4a4a6a',
-                letterSpacing: 2, marginBottom: 12, textAlign: 'center' }}>
-                PAGO SEGURO VÍA PAYPAL SANDBOX
-              </div>
-              <PayPalScriptProvider options={{ 'client-id': PAYPAL_CLIENT_ID, currency: 'USD' }}>
-                <PayPalButtons
-                  style={{ layout: 'vertical', shape: 'rect', label: 'pay' }}
-                  createOrder={(data, actions) => actions.order.create({
-                    purchase_units: [{
-                      amount: { value: total },
-                      description: `PokéVerse Shop - ${cart.length} carta(s)`,
-                    }]
-                  })}
-                  onApprove={(data, actions) => actions.order.capture().then(details => {
-                    onSuccess(details)
-                    onClose()
-                  })}
-                  onError={() => alert('Error en el pago. Intenta de nuevo.')}
-                />
-              </PayPalScriptProvider>
-            </div>
+            {/* Pay button */}
+            <button onClick={() => onSuccess({ id: 'TX-' + Date.now() })} style={{
+              width: '100%',
+              background: 'linear-gradient(135deg, #f5e642, #ffaa00)',
+              border: '1px solid #f5e642',
+              color: '#000',
+              padding: '14px',
+              borderRadius: 4,
+              fontFamily: 'Orbitron',
+              fontSize: 12,
+              cursor: 'pointer',
+              letterSpacing: 1,
+              fontWeight: 700,
+              transition: 'all 0.2s',
+            }}>PAGAR AHORA</button>
           </div>
         )}
       </div>

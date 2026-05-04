@@ -5,14 +5,14 @@ export default function CollectionView({ collection, onClose }) {
   const total = collection.reduce((s, i) => s + parseFloat(i.price), 0).toFixed(2)
 
   return (
-    <div style={{
+    <div className="collection-view" style={{
       position: 'fixed', inset: 0, zIndex: 900,
       background: '#050508',
       animation: 'slideDown 0.3s',
       overflowY: 'auto',
     }}>
       {/* Header */}
-      <div style={{
+      <div className="collection-header" style={{
         position: 'sticky', top: 0, zIndex: 10,
         background: '#050508',
         borderBottom: '1px solid #1e1e2e',
@@ -27,7 +27,7 @@ export default function CollectionView({ collection, onClose }) {
             {collection.length} CARTA{collection.length !== 1 ? 'S' : ''} OBTENIDA{collection.length !== 1 ? 'S' : ''}
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+        <div className="collection-actions" style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontFamily: 'Orbitron', fontSize: 9, color: '#4a4a6a', marginBottom: 4 }}>INVERSIÓN TOTAL</div>
             <div style={{ fontFamily: 'Orbitron', fontSize: 24, color: '#f5e642',
@@ -43,7 +43,7 @@ export default function CollectionView({ collection, onClose }) {
       </div>
 
       {/* Content */}
-      <div style={{ padding: '40px', maxWidth: 1200, margin: '0 auto' }}>
+      <div className="collection-content" style={{ padding: '40px', maxWidth: 1200, margin: '0 auto' }}>
         {collection.length === 0 ? (
           <div style={{
             textAlign: 'center', padding: '100px 0',
@@ -56,7 +56,7 @@ export default function CollectionView({ collection, onClose }) {
             </div>
           </div>
         ) : (
-          <div style={{
+          <div className="collection-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
             gap: 20,

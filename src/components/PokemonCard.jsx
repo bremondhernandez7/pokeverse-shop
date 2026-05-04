@@ -19,6 +19,7 @@ export default function PokemonCard({ pokemon, price, onAddToCart, inCollection 
 
   return (
     <div
+      className="pokemon-card"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -55,7 +56,7 @@ export default function PokemonCard({ pokemon, price, onAddToCart, inCollection 
       )}
 
       {/* Image area */}
-      <div style={{
+      <div className="pokemon-image-area" style={{
         background: `radial-gradient(circle at center, ${typeInfo.bg} 0%, #080810 70%)`,
         height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: 16, position: 'relative',
@@ -82,7 +83,7 @@ export default function PokemonCard({ pokemon, price, onAddToCart, inCollection 
       </div>
 
       {/* Info */}
-      <div style={{ padding: '14px 16px 16px' }}>
+      <div className="pokemon-card-body" style={{ padding: '14px 16px 16px' }}>
         {/* Number + name */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <span style={{ fontFamily: 'Orbitron', fontSize: 9, color: '#3a3a5c' }}>
@@ -132,7 +133,7 @@ export default function PokemonCard({ pokemon, price, onAddToCart, inCollection 
         </div>
 
         {/* Price + Buy button */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+        <div className="pokemon-card-actions" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
           <div>
             <div style={{ fontSize: 9, fontFamily: 'Orbitron', color: '#4a4a6a', marginBottom: 2 }}>PRECIO</div>
             <div style={{

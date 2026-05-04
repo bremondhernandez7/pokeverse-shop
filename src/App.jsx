@@ -75,12 +75,23 @@ export default function App() {
     setCart(prev => prev.filter((_, i) => i !== idx))
   }
 
-  function handlePaymentSuccess(details) {
-    const txId = details.id
-    const newItems = cart.map(item => ({ ...item, txId, purchasedAt: new Date().toISOString() }))
-    setCollection(prev => [...prev, ...newItems])
+  function handleClearCart() {
+    if (window.confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+      setCart([])
+      pushNotif('Carrito vaciado', 'info')
+    }
+  }
+
+  function handlePaymentSuccess(order) {
+    const purchased = cart.map(item => ({
+      ...item,
+      txId: order.id,
+      purchasedAt: new Date().toISOString(),
+    }))
+    setCollection([...collection, ...purchased])
     setCart([])
-    pushNotif(`¡Compra completada! TX: ${txId.slice(0,8)}...`, 'success')
+    setCartOpen(false)
+    pushNotif('Pago completado. Cartas añadidas a tu colección', 'success')
   }
 
   // Unique types for filter
@@ -128,9 +139,9 @@ export default function App() {
   }
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div className="app-shell" style={{ minHeight: '100vh' }}>
       {/* ── NAV ── */}
-      <nav style={{
+      <nav className="site-nav" style={{
         position: 'sticky', top: 0, zIndex: 500,
         background: '#08080f',
         borderBottom: '1px solid #1e1e2e',
@@ -140,7 +151,7 @@ export default function App() {
         boxShadow: '0 4px 30px rgba(0,0,0,0.6)',
       }}>
         {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
             width: 36, height: 36, borderRadius: 4,
             background: 'linear-gradient(135deg, #f5e642, #ff2d55)',
@@ -155,12 +166,13 @@ export default function App() {
         </div>
 
         {/* Nav actions */}
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <div className="nav-actions" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           {/* Search */}
-          <div style={{ position: 'relative' }}>
+          <div className="nav-search" style={{ position: 'relative' }}>
             <span style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)',
               color: '#4a4a6a', fontSize: 12 }}>🔍</span>
             <input
+              className="nav-search-input"
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="BUSCAR..."
@@ -173,7 +185,7 @@ export default function App() {
           </div>
 
           {/* Collection btn */}
-          <button onClick={() => setCollectionOpen(true)} style={{
+          <button className="nav-action-btn" onClick={() => setCollectionOpen(true)} style={{
             background: '#0d0d14',
             border: '1px solid #39ff1460',
             color: '#39ff14',
@@ -190,7 +202,7 @@ export default function App() {
           </button>
 
           {/* Cart btn */}
-          <button onClick={() => setCartOpen(true)} style={{
+          <button className="nav-action-btn cart-action-btn" onClick={() => setCartOpen(true)} style={{
             background: cart.length > 0
               ? 'linear-gradient(135deg, #f5e642, #ffaa00)'
               : '#0d0d14',
@@ -215,7 +227,7 @@ export default function App() {
       </nav>
 
       {/* ── HERO ── */}
-      <div style={{
+      <div className="hero-section" style={{
         background: 'linear-gradient(180deg, #0d0d1a 0%, #050508 100%)',
         borderBottom: '1px solid #1e1e2e',
         padding: '50px 40px 40px',
@@ -235,12 +247,12 @@ export default function App() {
           pointerEvents: 'none',
         }}/>
 
-        <div style={{ maxWidth: 700, position: 'relative' }}>
+        <div className="hero-copy" style={{ maxWidth: 700, position: 'relative' }}>
           <div style={{
             fontFamily: 'Orbitron', fontSize: 9, color: '#f5e642',
             letterSpacing: 4, marginBottom: 16,
           }}>◆ GEN 2-5 COLLECTION ◆</div>
-          <h1 style={{
+          <h1 className="hero-title" style={{
             fontFamily: 'Press Start 2P', fontSize: 28, lineHeight: 1.6,
             color: '#e8e8f0',
             marginBottom: 16,
@@ -249,7 +261,7 @@ export default function App() {
             <span style={{ color: '#f5e642', textShadow: '0 0 30px #f5e64260' }}>POKÉMON</span><br />
             CARDS
           </h1>
-          <p style={{
+          <p className="hero-text" style={{
             fontFamily: 'Rajdhani', fontSize: 17, color: '#7a7a9a',
             maxWidth: 500, lineHeight: 1.7,
           }}>
@@ -259,7 +271,7 @@ export default function App() {
         </div>
 
         {/* Stats bar */}
-        <div style={{
+        <div className="stats-bar" style={{
           display: 'flex', gap: 30, marginTop: 40,
           borderTop: '1px solid #1e1e2e', paddingTop: 30,
         }}>
@@ -269,7 +281,7 @@ export default function App() {
             { label: 'EN CARRITO', value: cart.length, color: '#00d4ff' },
             { label: 'INVERSIÓN TOTAL', value: `$${collection.reduce((s,i) => s+parseFloat(i.price),0).toFixed(2)}`, color: '#ff2d55' },
           ].map(s => (
-            <div key={s.label}>
+            <div className="stat-item" key={s.label}>
               <div style={{ fontFamily: 'Orbitron', fontSize: 9, color: '#4a4a6a', letterSpacing: 2, marginBottom: 6 }}>
                 {s.label}
               </div>
@@ -283,7 +295,7 @@ export default function App() {
       </div>
 
       {/* ── FILTERS ── */}
-      <div style={{
+      <div className="filters-bar" style={{
         padding: '20px 40px',
         borderBottom: '1px solid #1e1e2e',
         background: '#08080f',
@@ -296,7 +308,7 @@ export default function App() {
           const tc = TYPE_COLORS[type]
           const active = filter === type
           return (
-            <button key={type} onClick={() => setFilter(type)} style={{
+            <button className="filter-chip" key={type} onClick={() => setFilter(type)} style={{
               background: active
                 ? (tc ? tc.color : '#f5e642')
                 : (tc ? tc.bg : '#0d0d14'),
@@ -312,19 +324,19 @@ export default function App() {
             </button>
           )
         })}
-        <span style={{ marginLeft: 'auto', fontFamily: 'Orbitron', fontSize: 9, color: '#3a3a5c' }}>
+        <span className="filters-count" style={{ marginLeft: 'auto', fontFamily: 'Orbitron', fontSize: 9, color: '#3a3a5c' }}>
           {filtered.length} RESULTADO{filtered.length !== 1 ? 'S' : ''}
         </span>
       </div>
 
       {/* ── GRID ── */}
-      <main style={{ padding: '40px', maxWidth: 1400, margin: '0 auto' }}>
+      <main className="cards-main" style={{ padding: '40px', maxWidth: 1400, margin: '0 auto' }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '80px 0', fontFamily: 'Orbitron', color: '#3a3a5c' }}>
             <div style={{ fontSize: 9, letterSpacing: 2 }}>NO SE ENCONTRARON CARTAS</div>
           </div>
         ) : (
-          <div style={{
+          <div className="pokemon-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
             gap: 24,
@@ -343,7 +355,7 @@ export default function App() {
       </main>
 
       {/* ── FOOTER ── */}
-      <footer style={{
+      <footer className="site-footer" style={{
         borderTop: '1px solid #1e1e2e',
         padding: '30px 40px',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -362,7 +374,7 @@ export default function App() {
         visible={cartOpen}
         onClose={() => setCartOpen(false)}
         onRemove={handleRemoveFromCart}
-        onClear={() => setCart([])}
+        onClear={handleClearCart}
         onSuccess={handlePaymentSuccess}
       />
 
@@ -374,7 +386,7 @@ export default function App() {
       )}
 
       {/* ── NOTIFICATIONS ── */}
-      <div style={{
+      <div className="notifications-stack" style={{
         position: 'fixed', bottom: 24, right: 24,
         display: 'flex', flexDirection: 'column', gap: 10, zIndex: 2000,
         alignItems: 'flex-end',

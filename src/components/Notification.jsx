@@ -17,7 +17,7 @@ export default function Notification({ message, type = 'success', onDone }) {
   const c = colors[type] || colors.info
 
   return (
-    <div style={{
+    <div className="notification-card" style={{
       animation: leaving ? 'notif-out 0.5s forwards' : 'notif-in 0.4s forwards',
       background: '#0d0d14',
       border: `1px solid ${c.border}`,
